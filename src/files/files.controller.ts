@@ -10,7 +10,9 @@ import { Response } from 'express';
 
 @Controller('files')
 export class FilesController {
-  constructor(private readonly filesService: FilesService) { }
+  constructor(
+    private readonly filesService: FilesService,
+  ){}
 
   @Get('pokemon/:imageName')
   findPokemonImage(
