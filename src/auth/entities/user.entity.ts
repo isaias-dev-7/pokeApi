@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Pokemon } from "src/pokemon/entities";
+import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 export class User {
@@ -23,10 +24,26 @@ export class User {
         default: true,
     })
     isActive: boolean;
+     
+    @OneToMany(
+        () => Pokemon,
+        pokemon => pokemon.user,
+    )
+    pokemon: Pokemon; 
 
     @Column('text',{
         array: true,
         default: ['user']
     })
     roles: string[];
+
+    @BeforeInsert()
+    checkFieldsBeforeInsert(){
+        this.email = this.email.toLowerCase().trim();
+    }
+
+    @BeforeUpdate()
+    checkFieldsBeforeUpdate(){
+        this.checkFieldsBeforeInsert();
+    }
 }

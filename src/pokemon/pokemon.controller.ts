@@ -11,6 +11,8 @@ import { Controller,
 import { PokemonService } from './pokemon.service';
 import { CreatePokemonDto, UpdatePokemonDto } from './dto';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { Auth, GetUser } from '../auth/decorators';
+import { User } from '../auth/entities/user.entity';
 
 
 @Controller('pokemon')
@@ -18,8 +20,12 @@ export class PokemonController {
   constructor(private readonly pokemonService: PokemonService) {}
 
   @Post()
-  create(@Body() createPokemonDto: CreatePokemonDto) {
-    return this.pokemonService.create(createPokemonDto);
+  @Auth()
+  create(
+    @Body() createPokemonDto: CreatePokemonDto,
+    @GetUser() user: User
+  ) {
+    return this.pokemonService.create(createPokemonDto, user);
   }
 
   @Get()
@@ -35,10 +41,11 @@ export class PokemonController {
   @Patch(':id')
   update(
     @Param('id',ParseUUIDPipe) id: string, 
-    @Body() updatePokemonDto: UpdatePokemonDto
+    @Body() updatePokemonDto: UpdatePokemonDto,
+    @GetUser() user: User
   ) {
     
-    return this.pokemonService.update(id, updatePokemonDto);
+    return this.pokemonService.update(id, updatePokemonDto, user);
   }
 
   @Delete(':id')

@@ -2,12 +2,14 @@ import { BeforeInsert,
          BeforeUpdate,
          Column, 
          Entity, 
+         ManyToOne, 
          OneToMany, 
          PrimaryGeneratedColumn 
         } from "typeorm";
 import { PokemonImage } from "./pokemon-image.entity";
+import { User } from "../../auth/entities/user.entity";
 
-/* Inside of the decorator we can put the name of database
+/* Inside of the decorator we can put the name of table in the database
  * default = name of the entity
  */ 
 @Entity() 
@@ -20,6 +22,13 @@ export class Pokemon {
         unique:true,
     })
     name: string;
+
+    @ManyToOne(
+        () => User,
+        user => user.pokemon,
+        { eager: true}
+    )
+    user: User;
 
     @Column('character',{
         length:10,

@@ -6,13 +6,30 @@ interface SeedPokemon {
     gender: 'male'|'female';
 }
 
+interface SeedUser {
+    fullname: string;
+    email: string;
+    password: string;
+    roles: string [];
+}
+
 type ValidTypes = 'fire'|'thunther'|'ground'|'wind';
 
 interface SeedData {
-    pokemons: SeedPokemon[];
+    users: SeedUser[],
+    pokemons: SeedPokemon[],
 }
 
 export const initialData: SeedData = {
+    users: [
+        {
+            fullname: 'Isaias Elieser Osoria Tabares',
+            email: 'isaias@gmail.com',
+            password: 'Hithen257==',
+            roles: ['user','admin'],
+        }
+    ],
+
    pokemons: [
         {
             name:"pikachu",

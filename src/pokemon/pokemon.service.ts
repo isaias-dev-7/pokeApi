@@ -12,6 +12,7 @@ import { CreatePokemonDto,
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { validate as isUUID } from "uuid";
 import { PokemonImage, Pokemon } from './entities';
+import { User } from 'src/auth/entities/user.entity';
 
 @Injectable()
 export class PokemonService {
@@ -28,11 +29,12 @@ export class PokemonService {
     private readonly dataSource: DataSource,
   ){}
 
-  async create(createPokemonDto: CreatePokemonDto) {
+  async create(createPokemonDto: CreatePokemonDto, user: User) {
      try {
 
         const { images = [], ...pokemonDetails } = createPokemonDto;
         const pokemon = this.pokemonRepository.create({
+          user,
           ...pokemonDetails,
           images: images.map( image => this.pokemonImageRepository.create({ url: image})),
         });
@@ -67,7 +69,7 @@ export class PokemonService {
     return pokemon;
   }
 
-  async update(id: string, updatePokemonDto: UpdatePokemonDto) {
+  async update(id: string, updatePokemonDto: UpdatePokemonDto, user: User) {
     const { images, ...toUpdate } = updatePokemonDto;
     const pokemon = await this.pokemonRepository.preload({ id, ...toUpdate });
 
@@ -84,7 +86,7 @@ export class PokemonService {
           image => this.pokemonImageRepository.create({ url: image })
         ); 
       } 
-      
+      pokemon.user = user;
       await queryRunner.manager.save( pokemon );
      // this.pokemonRepository.save( pokemon );
       await queryRunner.commitTransaction();
