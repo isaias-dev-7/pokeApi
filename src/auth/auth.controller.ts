@@ -30,7 +30,6 @@ export class AuthController {
     @GetUser() user: User,
     @RawHeaders() rawHeaders: string[]
   ){
-    console.log(rawHeaders);
     return {
       user,
       rawHeaders
@@ -55,5 +54,13 @@ export class AuthController {
   ){
     
     return { user };
+  }
+
+  @Get('revalidate-token')
+  @Auth()
+  checkAuthStatus(
+    @GetUser() user: User
+  ){
+    return this.authService.checkAuthStatus(user);
   }
 }

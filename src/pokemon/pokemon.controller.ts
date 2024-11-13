@@ -13,7 +13,8 @@ import { CreatePokemonDto, UpdatePokemonDto } from './dto';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { Auth, GetUser } from '../auth/decorators';
 import { User } from '../auth/entities/user.entity';
-
+import { ApiResponse } from '@nestjs/swagger';
+import { Pokemon } from './entities';
 
 @Controller('pokemon')
 export class PokemonController {
@@ -21,6 +22,9 @@ export class PokemonController {
 
   @Post()
   @Auth()
+  @ApiResponse({status: 201, description:"Pokemon was created.", type: Pokemon})
+  @ApiResponse({status: 400, description:"Bad Request."})
+  @ApiResponse({status: 403, description:"Forbidden, token related."})
   create(
     @Body() createPokemonDto: CreatePokemonDto,
     @GetUser() user: User

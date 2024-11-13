@@ -8,6 +8,7 @@ import { BeforeInsert,
         } from "typeorm";
 import { PokemonImage } from "./pokemon-image.entity";
 import { User } from "../../auth/entities/user.entity";
+import { ApiProperty } from "@nestjs/swagger";
 
 /* Inside of the decorator we can put the name of table in the database
  * default = name of the entity
@@ -15,9 +16,11 @@ import { User } from "../../auth/entities/user.entity";
 @Entity() 
 export class Pokemon {
 
+    @ApiProperty()
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
+    @ApiProperty()
     @Column('text',{
         unique:true,
     })
@@ -30,23 +33,27 @@ export class Pokemon {
     )
     user: User;
 
+    @ApiProperty()
     @Column('character',{
         length:10,
     })
     type: string;
 
+    @ApiProperty()
     @Column('character',{
         length:10,
         nullable:true,
     })
     gender: string;
 
+    @ApiProperty()
     @Column('text',{
         array:true,
         default: [''],
     })
     ability: string[];
 
+    @ApiProperty()
     @OneToMany(
         () => PokemonImage,
         pokemonImage => pokemonImage.pokemon,
